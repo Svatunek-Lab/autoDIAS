@@ -1,6 +1,36 @@
-# autoDIAS
+# autoDIAS 2.0
 
-## a python tool for an automated Distortion/Interaction Activation Strain Analysis
+This repository now contains:
 
-The Distortion/Interaction Activation Strain (DIAS) analysis is a powerful tool for the investigation of energy barriers. However, setup and data analysis of such a calculation can be cumbersome and requires lengthy intervention of the user. We present autoDIAS, a python tool for the automated setup, performance, and data extraction of the DIAS analysis, including automated detection of fragments and relevant geometric parameters. 
+- `autoDIAS_1.0/`: the original script-based implementation preserved as a reference
+- `src/autodias/`: the new modular implementation under development
 
+The current `2.0` MVP focuses on replicating the core workflow with a cleaner architecture:
+
+- TOML configuration
+- RDKit-centered structure and fragment handling
+- XYZ and Gaussian structure ingestion
+- geometry extraction for distances, angles, and dihedrals
+- optional frame reordering and reduction
+- modular engine adapters
+- Gaussian input preparation, execution, and energy analysis
+
+ORCA-specific job generation and parsing will be added on top of the adapter layer next.
+
+## Install
+
+```bash
+pip install -e .
+```
+
+## Quick Start
+
+```bash
+autodias prepare examples/autodias.toml
+autodias run examples/autodias.toml
+autodias analyze examples/autodias.toml
+```
+
+## Configuration
+
+See [examples/autodias.toml](/c:/Users/Dennis/repos/autoDIAS/examples/autodias.toml) for a working template.

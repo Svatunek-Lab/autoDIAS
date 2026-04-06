@@ -1,0 +1,108 @@
+# Minimal documented template for the new autoDIAS 2.0 workflow.
+# This file is intended to be copied and edited per project.
+
+[project]
+# Project name used for generated folders and output files.
+name = "test"
+
+# Path to the input structure source.
+# Supported in the current MVP:
+# - multi-structure XYZ files
+# - Gaussian output files with orientation blocks
+input_path = "test.xyz"
+
+# Set to true only when you want analysis from existing output files
+# without preparing or running new jobs.
+analysis_only = false
+
+[structure]
+# Total charge and multiplicity of the full complex.
+charge = 0
+multiplicity = 1
+
+# Reorder frames if a large RMSD discontinuity suggests the path is flipped.
+reorder = false
+
+# Remove nearly identical adjacent frames based on aligned RMSD.
+reduce = false
+reduce_threshold = 0.2
+
+[fragments]
+# If true, fragments are inferred from RDKit connectivity on the structures.
+# If false, provide fragment1_atoms and fragment2_atoms explicitly.
+auto_detect = true
+
+# Human-readable fragment names used in generated files and reports.
+fragment1_name = "Fragment1"
+fragment2_name = "Fragment2"
+
+# Charge and multiplicity for the isolated fragment calculations.
+fragment1_charge = 0
+fragment1_multiplicity = 1
+fragment1_energy = -243.485731
+fragment2_charge = 0
+fragment2_multiplicity = 1
+fragment2_energy = -464.752500
+
+# Optional explicit atom assignments using 1-based indexing.
+# Leave empty when auto_detect = true.
+fragment1_atoms = []
+fragment2_atoms = []
+
+[analysis]
+# Enable DIAS table generation from completed output files.
+enabled = true
+
+# Geometric descriptors to extract for each frame.
+# Use 1-based atom indices.
+distances = [[1, 2]]
+angles = [[1, 2, 3]]
+dihedrals = [[1, 2, 3, 4]]
+
+[files]
+# Keep intermediate XYZ files for the complex and both fragments.
+keep_xyz = true
+
+# Keep generated engine input files after the workflow finishes.
+keep_input = true
+
+# Keep engine output files after analysis.
+keep_output = true
+
+# Keep the workflow log file.
+keep_log = true
+
+# If true, only write inputs and stop before job execution.
+prepare_only = false
+
+[engine]
+# Engine adapter name.
+# Gaussian is the primary supported path in the current MVP.
+# ORCA is scaffolded but not yet feature-complete.
+name = "gaussian"
+
+# File extensions for generated input/output files.
+input_extension = "com"
+output_extension = "log"
+
+# Command template used to run a single job.
+# `$input` and `$output` are replaced automatically.
+command = "g16 < $input > $output"
+
+# Input template for the chosen engine.
+# Available placeholders:
+# - $charge
+# - $multiplicity
+# - $coordinates
+# - $filename
+input_template = """
+%mem=32GB
+%nprocshared=16
+# B3LYP/6-311+g(d,p) empiricaldispersion=gd3
+
+Title
+
+$charge $multiplicity
+$coordinates
+
+"""
